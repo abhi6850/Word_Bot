@@ -8,7 +8,7 @@
 
 ## Preview
 
-![WordBot Light Mode](https://wordbot.netlify.app/preview-light.png)
+![WordBot Light Mode](./public/preview-light.png)
 
 ---
 
