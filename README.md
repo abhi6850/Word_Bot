@@ -1,70 +1,162 @@
-# Getting Started with Create React App
+# WordBot ✦
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> A fast, minimal text utility web app — transform, analyze, and clean your text instantly.
 
-## Available Scripts
+**🌐 Live Demo → [wordbot.netlify.app](https://wordbot.netlify.app)**
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## Preview
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+![WordBot Light Mode](https://wordbot.netlify.app/preview-light.png)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Case Conversion** — Uppercase, lowercase, and title case in one click
+- **Word Reversal** — Reverse the order of words in your text
+- **Space Cleaner** — Remove extra whitespace and normalize spacing
+- **One-Click Copy** — Copy the entire transformed text to clipboard
+- **Live Text Stats** — Word count, character count, sentence count, and reading time
+- **Live Preview** — See your text as you type before applying transforms
+- **Dark / Light Mode** — Smooth theme toggle with system-level CSS variables
+- **Toast Notifications** — Instant feedback for every action (no alert boxes)
+- **Fully Responsive** — Works on mobile, tablet, and desktop
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Tech Stack
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+| Layer | Technology |
+|---|---|
+| Framework | React 19 |
+| Routing | React Router DOM v6 |
+| Styling | Custom CSS (CSS Variables, no UI framework) |
+| Fonts | Syne + DM Sans (Google Fonts) |
+| Build Tool | Create React App (react-scripts) |
+| Deployment | Netlify |
+| Version Control | Git + GitHub |
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## Getting Started
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Prerequisites
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Node.js 18.x or higher
+- npm
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Installation
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+# Clone the repository
+git clone https://github.com/your-username/wordbot.git
+cd wordbot
 
-## Learn More
+# Install dependencies
+npm install
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+# Start development server
+npm start
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The app will open at `http://localhost:3000`.
 
-### Code Splitting
+### Build for Production
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+npm run build
+```
 
-### Analyzing the Bundle Size
+The optimized build will be in the `/build` folder, ready to deploy.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+## Project Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```
+wordbot/
+├── public/
+│   ├── index.html          # HTML entry point with Google Fonts
+│   └── manifest.json
+├── src/
+│   ├── Components/
+│   │   ├── Navbar.js       # Sticky navbar with dark mode toggle & mobile menu
+│   │   └── TextForm.js     # Core text utility — actions, stats, preview
+│   ├── App.js              # Root component, theme state management
+│   ├── App.css
+│   └── index.css           # Full design system (tokens, layout, components)
+├── netlify.toml            # Netlify build config + SPA redirect rule
+└── package.json
+```
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Deployment (Netlify)
 
-### Deployment
+This project includes a `netlify.toml` for zero-config deployment.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Deploy from GitHub
 
-### `npm run build` fails to minify
+1. Push your code to a GitHub repository
+2. Go to [netlify.com](https://netlify.com) → **Add new site** → **Import an existing project**
+3. Connect GitHub and select your repo
+4. Netlify auto-detects settings from `netlify.toml`:
+   - **Build command:** `npm run build`
+   - **Publish directory:** `build`
+5. Click **Deploy** — live in ~60 seconds
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Manual Deploy via Netlify CLI
+
+```bash
+npm install -g netlify-cli
+netlify login
+netlify deploy --prod
+```
+
+---
+
+## Design System
+
+The entire UI is driven by CSS custom properties, making theming trivial:
+
+```css
+:root {
+  --accent: #6C63FF;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --bg: #F7F6F2;
+  --bg-card: #FFFFFF;
+}
+
+[data-theme="dark"] {
+  --bg: #0D0D14;
+  --bg-card: #17172A;
+  --accent: #8B82FF;
+}
+```
+
+Switching themes is a single attribute toggle on `<html>` — no class juggling, no JS-heavy theming libraries.
+
+---
+
+## Contributing
+
+Pull requests are welcome! For major changes, please open an issue first.
+
+1. Fork the repo
+2. Create your feature branch: `git checkout -b feature/my-feature`
+3. Commit your changes: `git commit -m 'Add my feature'`
+4. Push to the branch: `git push origin feature/my-feature`
+5. Open a pull request
+
+---
+
+## License
+
+[MIT](LICENSE)
+
+---
+
+<p align="center">Built with React · Hosted on Netlify</p>
