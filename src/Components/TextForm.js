@@ -1,68 +1,124 @@
-import React, { useState } from 'react'
+import { useState, useCallback } from 'react';
 
+export default function TextForm() {
+  const [text, setText] = useState('');
+  const [toast, setToast] = useState('');
+  const [toastVisible, setToastVisible] = useState(false);
 
-export default function TextForm(props) {
-    const [Text, setText] = useState('');
-    const handleUpclick = () => {
-        let newText = Text.toUpperCase();
-        setText(newText);
+  const showToast = (msg) => {
+    setToast(msg);
+    setToastVisible(true);
+    setTimeout(() => setToastVisible(false), 2200);
+  };
 
-    }
-    const handleDownclick = () => {
-        let newText = Text.toLowerCase();
-        
-        setText(newText);
+  const wordCount = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+  const charCount = text.length;
+  const readTime = (0.008 * wordCount).toFixed(2);
+  const sentenceCount = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
 
-    }
-    const handleCleartext = () => {
-        let newText = '';
-        setText(newText);
+  const actions = [
+    {
+      label: '↑ Uppercase',
+      style: 'primary',
+      fn: () => { setText(text.toUpperCase()); showToast('Converted to uppercase'); },
+    },
+    {
+      label: '↓ Lowercase',
+      style: 'primary',
+      fn: () => { setText(text.toLowerCase()); showToast('Converted to lowercase'); },
+    },
+    {
+      label: '✦ Title Case',
+      style: 'ghost',
+      fn: () => {
+        setText(text.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()));
+        showToast('Title case applied');
+      },
+    },
+    {
+      label: '⟳ Reverse',
+      style: 'ghost',
+      fn: () => { setText(text.split(' ').reverse().join(' ')); showToast('Words reversed'); },
+    },
+    {
+      label: '⌥ Remove Spaces',
+      style: 'ghost',
+      fn: () => { setText(text.trim().replace(/\s+/g, ' ')); showToast('Extra spaces removed'); },
+    },
+    {
+      label: '⎘ Copy',
+      style: 'ghost',
+      fn: () => { navigator.clipboard.writeText(text); showToast('Copied to clipboard!'); },
+    },
+    {
+      label: '✕ Clear',
+      style: 'danger',
+      fn: () => { setText(''); showToast('Text cleared'); },
+    },
+  ];
 
-    }
-    const handleRemoveSpace = () => {
-        let newText = Text.trim().replace(/\s+/g, ' ');
-        setText(newText);
+  return (
+    <>
+      {/* Input card */}
+      <div className="wb-card">
+        <div className="wb-card-title">Your Text</div>
+        <textarea
+          className="wb-textarea"
+          value={text}
+          onChange={e => setText(e.target.value)}
+          placeholder="Paste or type your text here…"
+          rows={8}
+        />
+        <div className="wb-char-count">{charCount} characters</div>
 
-    }
-    const handleInverse = () => {
-        let newText = Text.split(' ').reverse().join(' ');
-        setText(newText);
-
-    }
-    const handleCopy = () => {
-        navigator.clipboard.writeText(Text);
-
-    }
-    const handleOnchange = (event) => {
-        setText(event.target.value)   
-
-    }
-    
-
-
-    return (
-        <>
-        <div className="container">
-            <h1>{props.heading}</h1>
-            <div className="mb-3">
-                <textarea className="form-control border-dark" value={Text} onChange={handleOnchange} style={{backgroundColor: props.mode==='dark' ? '#FCECDD':'white'}}  id="myBox" rows="8" placeholder='Enter text here'></textarea>
-            </div>
-            <div className="btn btn-primary mx-1" onClick={handleUpclick}><b>Convert to uppercase</b></div>
-            <div className="btn btn-primary mx-1" onClick={handleDownclick}><b>Convert to lowercase</b></div>
-            <div className="btn btn-primary mx-1" onClick={handleCleartext}><b>Clear Text</b></div>
-            <div className="btn btn-primary mx-1" onClick={handleRemoveSpace}><b>Remove Extra Spaces</b></div>  
-            <div className="btn btn-primary mx-1" onClick={handleInverse}><b>Inverse your sentence</b></div>
-            <div className="btn btn-primary mx-1" onClick={handleCopy}><b>Copy Text</b></div>
-
+        <div className="wb-actions">
+          {actions.map(({ label, style, fn }) => (
+            <button
+              key={label}
+              className={`wb-btn wb-btn-${style}`}
+              onClick={fn}
+              disabled={text.length === 0 && label !== '✕ Clear'}
+            >
+              {label}
+            </button>
+          ))}
         </div>
-        <div className="container my-3">
-            <h1>Your Text summary</h1>
-            <p>{Text.split(" ").length} words and {Text.length} characters</p>
-             <p>{Text.length===0 ?" ":`Time taken to read approximately is ${0.008 * Text.split(" ").length } minutes`}</p>
-            
-            <h2>Preview</h2>
-            <p>{Text.length>0 ? Text:"Enter something in text box above to preview"}</p>
+
+        {/* Stats */}
+        <div className="wb-stats">
+          <div className="wb-stat">
+            <span className="wb-stat-label">Words</span>
+            <span className="wb-stat-value">{wordCount}</span>
+          </div>
+          <div className="wb-stat">
+            <span className="wb-stat-label">Characters</span>
+            <span className="wb-stat-value">{charCount}</span>
+          </div>
+          <div className="wb-stat">
+            <span className="wb-stat-label">Sentences</span>
+            <span className="wb-stat-value">{sentenceCount}</span>
+          </div>
+          <div className="wb-stat">
+            <span className="wb-stat-label">Read Time</span>
+            <span className="wb-stat-value">{readTime}</span>
+            <span className="wb-stat-sub">minutes</span>
+          </div>
         </div>
-        </>
-    )
+      </div>
+
+      {/* Preview card */}
+      <div className="wb-card" style={{ animationDelay: '0.2s' }}>
+        <div className="wb-preview-label">Preview</div>
+        <div className="wb-preview-text">
+          {text.length > 0
+            ? text
+            : <span className="wb-preview-empty">Your text will appear here…</span>
+          }
+        </div>
+      </div>
+
+      {/* Toast */}
+      <div className={`wb-toast${toastVisible ? ' show' : ''}`}>{toast}</div>
+    </>
+  );
 }

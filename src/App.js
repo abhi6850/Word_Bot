@@ -1,43 +1,35 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import Navbar from './Components/Navbar';
 import TextForm from './Components/TextForm';
 
-
-
-
-
-
 function App() {
-  const [mode, setmode] = useState('light');
-  
-  
+  const [mode, setMode] = useState('light');
+
   const toggleMode = () => {
-    if (mode ==='light') {
-      setmode('dark');
-      document.body.style.backgroundColor='#0B1D51';
-      document.body.style.color='white'; 
-    
-      
-    }
-    else {
-      setmode('light');
-      document.body.style.backgroundColor='white';
-      document.body.style.color='black';
-    }
-    
-  }
-  
+    const next = mode === 'light' ? 'dark' : 'light';
+    setMode(next);
+    document.documentElement.setAttribute('data-theme', next);
+  };
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', 'light');
+  }, []);
+
   return (
     <>
-     <Navbar title="Word Bot" mode={mode} toggleMode={toggleMode}/>
-     
-     <div className="container my-3">
-      <TextForm heading="Enter text to analyze" mode={mode}/>
-     </div>
-     
-
+      <Navbar title="WordBot" mode={mode} toggleMode={toggleMode} />
+      <main className="wb-page">
+        <div className="wb-hero">
+          <div className="wb-hero-badge">✦ Text Utility</div>
+          <h1>Transform your <span>text instantly</span></h1>
+          <p>Uppercase, lowercase, clean spaces, copy, and more — all in one place, no fluff.</p>
+        </div>
+        <TextForm mode={mode} />
+      </main>
+      <footer className="wb-footer">
+        Built with React &mdash; <a href="https://github.com" target="_blank" rel="noreferrer">View on GitHub</a>
+      </footer>
     </>
   );
 }
